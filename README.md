@@ -7,7 +7,7 @@ Eric Evans, Vaughn Vernon, Vlad Khononov, Mathias Verraes, Alberto Brandolini, N
 
 ## Özellikler
 - 💬 **Danışma** — Mimari sorularınızı 15 uzmana sorun, sentez + bireysel cevaplar alın
-- 🖼️ **Diagram Analizi** — Mevcut diyagramı yükle, As-Is doğrula, To-Be Mermaid diagram üret
+- 🖼️ **Diagram Analizi** — Diyagramı yükle, As-Is doğrula, To-Be Mermaid diagram üret
 - 📚 **Bilgi Tabanı** — Uzmanlara PDF veya makale yükle
 
 ## Teknolojiler
@@ -16,46 +16,60 @@ Eric Evans, Vaughn Vernon, Vlad Khononov, Mathias Verraes, Alberto Brandolini, N
 - **AI**: Anthropic Claude (claude-haiku-4-5)
 - **Vector DB**: ChromaDB 0.5.23
 
-## Kurulum
+## Kurulum (Docker ile)
 
 ### Gereksinimler
-- Java 21+
-- Node.js 18+
-- Docker
+- Docker + Docker Compose
+- Anthropic API Key → https://console.anthropic.com
 
-### 1. ChromaDB başlat
-```bash
-docker run -d -p 8000:8000 \
-  -v $(pwd)/chromadb-data:/chroma/chroma \
-  chromadb/chroma:0.5.23
-```
+### 1. Kurulum
 
-### 2. Environment ayarla
 ```bash
+git clone https://github.com/kagantantan/MimariKomiteAgent.git
+cd MimariKomiteAgent
 cp .env.example .env
-# .env dosyasına Anthropic API key ekle
+# .env dosyasına ANTHROPIC_API_KEY ekleyin
 ```
 
-### 3. Backend başlat
-```bash
-export $(cat .env) && mvn spring-boot:run
-```
+### 2. Kitapları hazırla
 
-### 4. Frontend başlat
-```bash
-cd frontend && npm install && npm run dev
-```
+`books/` klasörü oluşturun ve aşağıdaki kitapları PDF olarak ekleyin:
 
-### 5. Kitapları yükle
+| Uzman | Kitap |
+|-------|-------|
+| Eric Evans | Domain-Driven Design (Blue Book) |
+| Vaughn Vernon | Implementing DDD, DDD Distilled, Strategic Monoliths |
+| Vlad Khononov | Learning Domain-Driven Design |
+| Martin Fowler | Refactoring, PoEAA |
+| Alberto Brandolini | Introducing EventStorming |
+| Nick Tune | Architecture Modernization |
+| Sam Newman | Building Microservices, Monolith to Microservices |
+| Chris Richardson | Microservices Patterns |
+| Martin Kleppmann | Designing Data-Intensive Applications |
+| Pramod Sadalage | Refactoring Databases |
+| Ford & Richards | Software Architecture: The Hard Parts, Fundamentals |
+| Kent Beck | TDD By Example, Tidy First, XP Explained |
+| Uncle Bob | Clean Architecture, Clean Code, Clean Craftsmanship |
+| Michael Feathers | Working Effectively with Legacy Code |
+
+> ⚠️ `load-books.sh` içindeki dosya adlarını kendi PDF dosya adlarınıza göre güncelleyin.
+
+### 3. Başlat
+
 ```bash
+docker-compose up -d
+sleep 30
+docker cp books/ mimarikomiteagent-backend-1:/app/books/
 ./load-books.sh
 ```
 
-## Kullanım
-- Backend: http://localhost:8080
+### 4. Aç
+
 - Frontend: http://localhost:5173
+- Backend API: http://localhost:8080
 
 ## API
+
 | Endpoint | Method | Açıklama |
 |----------|--------|----------|
 | `/api/consult` | POST | Mimari soru sor |
@@ -66,6 +80,6 @@ cd frontend && npm install && npm run dev
 | `/api/knowledge/ingest-text` | POST | Metin yükle |
 | `/api/knowledge/status` | GET | Uzman listesi |
 
-## Kitaplar Hakkında
-`books/` klasörü telif hakkı nedeniyle repoya dahil edilmemiştir.
-Kendi kitaplarınızı `books/` klasörüne ekleyip `load-books.sh` ile yükleyebilirsiniz.
+## Notlar
+- `books/` klasörü telif hakkı nedeniyle repoya dahil edilmemiştir
+- Kitaplar ChromaDB'ye yerel embedding modeli ile yüklenir (Anthropic API maliyeti yoktur)
