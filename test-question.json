@@ -1,0 +1,3 @@
+{
+  "question": "15 yıllık monolitik ve spagetti olmuş bir e-ticaret uygulamamız var. Veritabanı olarak tek bir devasa Oracle DB kullanılıyor ve tablolar arası çok fazla foreign key bağımlılığı var. Sistemi mikroservislere bölmek istiyoruz ancak veri tutarlılığından (consistency) ödün vermek istemiyoruz. Veritabanını nasıl parçalamalıyız ve servisler arası iletişimi asenkron mu senkron mu yapmalıyız?"
+}
