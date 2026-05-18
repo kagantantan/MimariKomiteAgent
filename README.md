@@ -65,3 +65,7 @@ cd frontend && npm install && npm run dev
 | `/api/knowledge/ingest-pdf` | POST | PDF yükle |
 | `/api/knowledge/ingest-text` | POST | Metin yükle |
 | `/api/knowledge/status` | GET | Uzman listesi |
+
+## Kitaplar Hakkında
+`books/` klasörü telif hakkı nedeniyle repoya dahil edilmemiştir.
+Kendi kitaplarınızı `books/` klasörüne ekleyip `load-books.sh` ile yükleyebilirsiniz.
