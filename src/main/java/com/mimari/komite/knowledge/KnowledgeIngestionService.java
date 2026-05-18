@@ -21,7 +21,7 @@ public class KnowledgeIngestionService {
         org.springframework.http.client.SimpleClientHttpRequestFactory factory = new org.springframework.http.client.SimpleClientHttpRequestFactory();
         this.restClient = restClientBuilder
                 .requestFactory(factory)
-                .baseUrl("http://localhost:8000")
+                .baseUrl(System.getenv("CHROMA_URL") != null ? System.getenv("CHROMA_URL") : "http://localhost:8000")
                 .build();
     }
 
