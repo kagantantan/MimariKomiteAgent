@@ -50,7 +50,11 @@ export default function DiagramPage() {
     setLoading(true);
     try {
       const res = await axios.post('/api/diagram/validate', {
-        analysis: JSON.stringify(asIsAnalysis),
+        analysis: `Mimari Analiz Özeti: ${asIsAnalysis.analysis}
+        
+Tespit Edilen Bileşenler: ${asIsAnalysis.components.join(', ')}
+
+Sorunlar: ${asIsAnalysis.issues.join(', ')}`,
         userAnswer
       });
       setValidationQuestions(res.data.questions || []);
@@ -66,7 +70,11 @@ export default function DiagramPage() {
     setLoading(true);
     try {
       const res = await axios.post('/api/diagram/generate', {
-        asIs: JSON.stringify(asIsAnalysis),
+        asIs: `Mimari Analiz Özeti: ${asIsAnalysis.analysis}
+        
+Tespit Edilen Bileşenler: ${asIsAnalysis.components.join(', ')}
+
+Sorunlar: ${asIsAnalysis.issues.join(', ')}`,
         confirmed: true
       });
       setToBeRecommendation(res.data.toBe);
@@ -186,7 +194,21 @@ export default function DiagramPage() {
                     </div>
                   ) : asIsAnalysis ? (
                     <div>
-                      <p className="text-sm text-slate-700 mb-3">{asIsAnalysis.analysis}</p>
+                      {asIsAnalysis.analysis.includes('[Uzman Degerlendirmesi]') ? (
+                        <div>
+                          <p className="text-sm text-slate-700 mb-3">
+                            {asIsAnalysis.analysis.split('[Uzman Degerlendirmesi]')[0]}
+                          </p>
+                          <div className="bg-purple-50 border-l-4 border-purple-400 p-3 rounded-lg mt-2">
+                            <p className="text-xs font-semibold text-purple-700 mb-1">🎓 15 Uzman Sentezi</p>
+                            <p className="text-xs text-purple-800 leading-relaxed">
+                              {asIsAnalysis.analysis.split('[Uzman Degerlendirmesi]:')[1]}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-slate-700 mb-3">{asIsAnalysis.analysis}</p>
+                      )}
                       <div className="mb-2">
                         <span className="text-xs font-semibold text-slate-500 uppercase">Bileşenler</span>
                         <ul className="mt-1 space-y-1">

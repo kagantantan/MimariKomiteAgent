@@ -80,7 +80,7 @@ public class OrchestratorService {
 
         // 3. Seçili uzmanları paralel çağır
         Map<String, String> answers = new ConcurrentHashMap<>();
-        selectedAgents.parallelStream().forEach(agent -> {
+        selectedAgents.stream().forEach(agent -> {
             String answer = agent.consult(question);
             answers.put(agent.getName(), answer);
         });
